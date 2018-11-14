@@ -12,6 +12,10 @@ namespace ToDoApp.Models
 
         public string Description { get; set; }
 
+        public int? TagsId { get; set; }
+
+        public Tags Tags { get; set; }
+
         public int StatusId { get; set; }
 
         [UIHint("Status")]
@@ -19,5 +23,6 @@ namespace ToDoApp.Models
 
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? Created { get; set; }
+
     }
 }

@@ -20,10 +20,16 @@ namespace ToDoApp.Data
             modelBuilder.Entity<ToDo>().Property(x => x.Id).UseSqlServerIdentityColumn();
             modelBuilder.Entity<ToDo>().HasOne(x => x.Status).WithMany(x => x.ToDos).HasForeignKey(x => x.StatusId);
             modelBuilder.Entity<ToDo>().HasIndex(x => x.StatusId).HasName($"IX_{nameof(ToDo)}_{nameof(ToDo.Status)}");
+            modelBuilder.Entity<ToDo>().HasOne(x => x.Tags).WithMany(x => x.ToDos).HasForeignKey(x => x.TagsId);
+            modelBuilder.Entity<ToDo>().HasIndex(x => x.TagsId).HasName($"IX_{nameof(ToDo)}_{nameof(ToDo.Tags)}");
 
             modelBuilder.Entity<Status>().HasMany(x => x.ToDos).WithOne(x => x.Status);
+
+            modelBuilder.Entity<Tags>().HasMany(x => x.ToDos).WithOne(x => x.Tags);
+
         }
 
+        public DbSet<Tags> Tags { get; set; }
         public DbSet<ToDo> ToDos { get; set; }
 
         public DbSet<Status> Statuses { get; set; }
