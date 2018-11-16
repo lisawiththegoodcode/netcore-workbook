@@ -41,13 +41,12 @@
             @Html.DisplayFor(model => model.Created)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Tags)
+            @Html.DisplayNameFor(model => model.Tag)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Tags.Value)
+            @Html.DisplayFor(model => model.Tag.Value)
         </dd>
-
-</dl>
+    </dl>
 </div>
 <div>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
