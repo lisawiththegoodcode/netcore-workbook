@@ -78,7 +78,7 @@ namespace ToDoApp
             using (var serviceScope = scopeFactory.CreateScope())
             using (var context = serviceScope.ServiceProvider.GetService<ToDoContext>())
             {
-                context.Database.EnsureDeleted();
+                //context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
             }
         }
