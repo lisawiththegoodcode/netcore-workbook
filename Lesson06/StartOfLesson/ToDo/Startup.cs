@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ToDoApp.Areas.Tags.Data;
 using ToDoApp.Data;
 using ToDoApp.Infrastructure;
+using ToDoApp.Models;
 using ToDoApp.Services;
 using WebServerUtilities;
 
@@ -40,8 +42,8 @@ namespace ToDoApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ToDoContext>(config => config.UseSqlServer(Configuration.GetConnectionString("ToDoApp")));    
-
+            services.AddDbContext<ToDoContext>(config => config.UseSqlServer(Configuration.GetConnectionString("ToDoApp")));
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -61,6 +63,7 @@ namespace ToDoApp
             app.UseMiddleware<UnwrapExceptionMiddleware>();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -81,9 +84,12 @@ namespace ToDoApp
             using (var serviceScope = scopeFactory.CreateScope())
             using (var toDoContext = serviceScope.ServiceProvider.GetService<ToDoContext>())
             using (var tagContext = serviceScope.ServiceProvider.GetService<TagContext>())
+            using (var identityContext = serviceScope.ServiceProvider.GetService<IdentityToDoDbContext>())
+
             {
                 toDoContext.Database.Migrate();
                 tagContext.Database.Migrate();
+                identityContext.Database.Migrate();
             }
         }
     }
